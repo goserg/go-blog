@@ -1,0 +1,7 @@
+{{ define "content" }}
+    <h1>Logout Page</h1>
+    <p>Вы вошли как {{ .User.UserName }}</p>
+    <form method="post">
+        <input class="button" type="submit" value="Выйти">
+    </form>
+{{ end }}

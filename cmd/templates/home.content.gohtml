@@ -1,0 +1,17 @@
+{{ define "content" }}
+    <h1>Главная страница</h1>
+    {{ range .Posts }}
+        <div class="post">
+            <h2 class="post__title">{{ .Title }}</h2>
+            <p class="post__text">{{.Text }}</p>
+            <p class="post__time">Опубликовано {{ .Time }}</p>
+            <p class="post__author">Автор поста: {{ .Author.UserName }}</p>
+        </div>
+    {{ end }}
+
+    {{ if .User.Authorized }}
+        <a href="/create/" class="button">Создать заметку</a>
+    {{ else }}
+        <p>Только зарегистрированные пользователи могут создавать заметки</p>
+    {{ end }}
+{{ end }}

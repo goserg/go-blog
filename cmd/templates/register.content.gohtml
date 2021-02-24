@@ -1,0 +1,14 @@
+{{ define "content" }}
+    <form class="form" method="post">
+        <h1>Регистрация</h1>
+        <div class="errors">
+            {{ range .Errors}}
+                <p class="error">{{ . }}</p>
+            {{ end }}
+        </div>
+        <input type="text" name="userName" placeholder="Имя пользователя">
+        <input type="password" name="password1" placeholder="Пароль">
+        <input type="password" name="password2" placeholder="Подтверждение">
+        <input type="submit" value="Зарегистрировать">
+    </form>
+{{ end }}
