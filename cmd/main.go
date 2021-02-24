@@ -12,21 +12,8 @@ import (
 	"github.com/goserg/microblog/server/controller"
 )
 
-const (
-	user     = "postgres"
-	password = "pass"
-	host     = "db"
-	port     = 5432
-	dbname   = "postgres"
-)
-
 func main() {
-	db, err := sql.Open("postgres", fmt.Sprintf("postgres://%v:%v@%v:%v/%v?sslmode=disable",
-		user,
-		password,
-		host,
-		port,
-		dbname))
+	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Fatal(err)
 	}
