@@ -32,7 +32,5 @@ func main() {
 
 	port := os.Getenv("PORT")
 
-	fmt.Println(port)
-
 	http.ListenAndServe(":"+port, nil)
 }

@@ -30,6 +30,8 @@ func (c *Controller) CreatePostPage(w http.ResponseWriter, r *http.Request) {
 			Author: data.User,
 		}
 		c.insertPostToDB(&post)
+
+		http.Redirect(w, r, "/", http.StatusFound)
 	}
 
 	files := []string{

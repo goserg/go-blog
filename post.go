@@ -6,4 +6,6 @@ type Post struct {
 	Title  string
 	Text   string
 	Author User
+
+	Strings []string
 }
