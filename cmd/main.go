@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	_ "github.com/lib/pq"
 
@@ -42,5 +43,9 @@ func main() {
 
 	fmt.Println("Server started")
 
-	http.ListenAndServe(":8080", nil)
+	port := os.Getenv("PORT")
+
+	fmt.Println(port)
+
+	http.ListenAndServe(":"+port, nil)
 }
