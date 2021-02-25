@@ -90,6 +90,7 @@ POST
     padding: 1rem;
     border: 1px solid #FFE082;
     margin-bottom: 0.5rem;
+    word-wrap: break-word;
 }
 .post__title {
     color: #FF6F00;
