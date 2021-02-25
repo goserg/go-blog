@@ -11,15 +11,16 @@
                 <p class="post__author">Автор поста: {{ .Author.UserName }}</p>
             </div>
         {{ end }}
-
-        {{ if .User.Authorized }}
-            <a href="/create/" class="button">Создать заметку</a>
-        {{ else }}
-            <p>Только зарегистрированные пользователи могут создавать заметки</p>
-        {{ end }}
     {{ else }}
         <p>Тут больше смотреть нечего</p>
     {{ end }}
+
+    {{ if .User.Authorized }}
+        <a href="/create/" class="button">Создать заметку</a>
+    {{ else }}
+        <p>Только зарегистрированные пользователи могут создавать заметки</p>
+    {{ end }}
+
     <p>
         {{ range .PrevPages }}
         <a href="/{{ . }}/">{{ . }}</a>
