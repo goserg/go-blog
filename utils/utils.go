@@ -4,6 +4,7 @@ import (
 	"crypto/sha1"
 	"encoding/hex"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -30,7 +31,7 @@ func ReadUserIP(r *http.Request) string {
 	return IPAddress
 }
 
-var tokenKey = []byte("tokenpassk")
+var tokenKey = []byte(os.Getenv("TOKEN_PASS"))
 
 type Claims struct {
 	Username     string `json:"username"`
