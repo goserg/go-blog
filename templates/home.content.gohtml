@@ -1,5 +1,5 @@
 {{ define "content" }}
-    <h1>Главная страница</h1>
+    <h1 class="title">Главная страница</h1>
     {{ if .Posts }}
         {{ range .Posts }}
             <div class="post">
@@ -14,13 +14,11 @@
     {{ else }}
         <p>Тут больше смотреть нечего</p>
     {{ end }}
-
     {{ if .User.Authorized }}
         <a href="/create/" class="button">Создать заметку</a>
     {{ else }}
         <p>Только зарегистрированные пользователи могут создавать заметки</p>
     {{ end }}
-
     <p>
         {{ range .PrevPages }}
         <a href="/{{ . }}/">{{ . }}</a>
