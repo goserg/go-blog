@@ -7,5 +7,5 @@ type Post struct {
 	Text   string
 	Author User
 
-	Strings []string
+	Units []PostUnit
 }

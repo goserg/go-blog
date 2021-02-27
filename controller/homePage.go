@@ -77,7 +77,51 @@ func (c *Controller) getPosts(page int) []server.Post {
 		rows.Scan(&post.ID, &post.Time, &post.Title, &post.Text, &authorID)
 		post.Author = c.getAuthorFromDBByID(uint64(authorID))
 		post.Time = strings.Replace(strings.Split(post.Time, ".")[0], "T", " в ", -1)
-		post.Strings = strings.Split(post.Text, "\n")
+
+		for post.Text != "" {
+			fmt.Println(post.Text)
+			unit := server.PostUnit{}
+			firstLink := strings.Index(post.Text, "[Link]")
+			firstBr := strings.Index(post.Text, "\n")
+			fmt.Println(firstBr)
+			fmt.Println(firstLink)
+			if firstLink == -1 && firstBr == -1 {
+				fmt.Println("чистый текст")
+				unit.Text = post.Text
+				unit.UnitType = "text"
+				post.Text = ""
+				post.Units = append(post.Units, unit)
+				continue
+			}
+			if firstBr >= 0 && firstBr < firstLink || firstLink == -1 {
+				fmt.Println("текстовый элемент")
+				unit.Text = post.Text[0:firstBr]
+				fmt.Println(unit.Text)
+				post.Text = post.Text[firstBr+1 : len(post.Text)]
+				post.Units = append(post.Units, unit, server.PostUnit{UnitType: "BR"})
+				continue
+			}
+			if firstLink < firstBr || firstBr == -1 {
+				if firstLink != 0 {
+					unit.Text = post.Text[0:firstLink]
+					unit.UnitType = "text"
+					post.Units = append(post.Units, unit)
+					post.Text = post.Text[firstLink:len(post.Text)]
+				}
+
+				unit = server.PostUnit{UnitType: "link"}
+				indexOfText := strings.Index(post.Text, "[LinkText]")
+				fmt.Printf(`indexOfText: %d`, indexOfText)
+				indexOfLinkEnd := strings.Index(post.Text, "[/Link]")
+				unit.Link = post.Text[6:indexOfText]
+				fmt.Printf(`ссылка: %s`, unit.Link)
+				unit.Text = post.Text[indexOfText+10 : indexOfLinkEnd]
+				post.Units = append(post.Units, unit)
+
+				post.Text = post.Text[indexOfLinkEnd+7 : len(post.Text)]
+				continue
+			}
+		}
 		posts = append(posts, post)
 	}
 	return posts

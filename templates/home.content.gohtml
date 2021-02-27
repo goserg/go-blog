@@ -4,9 +4,16 @@
         {{ range .Posts }}
             <div class="post">
                 <h2 class="post__title">{{ .Title }}</h2>
-                {{ range .Strings }}
-                <p>{{ . }}</p>
-                {{ end }}
+                <p>{{ range .Units }}
+                    {{ if eq .UnitType "BR"}}
+                    </p><p>
+                    {{ end }}
+                    {{ if .Link }}
+                        <a href="{{.Link}}" target="blank">{{.Text}}</a>
+                    {{ else }}
+                        {{ .Text }}
+                    {{ end }}
+                {{ end }}</p>
                 <p class="post__time">Опубликовано {{ .Time }}</p>
                 <p class="post__author">Автор поста: {{ .Author.UserName }}</p>
             </div>
