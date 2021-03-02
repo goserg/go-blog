@@ -11,11 +11,11 @@
             {{ .Text }}
         {{ end }}
     {{ end }}</p>
-    {{ if isAuthorized }}
     <div class="post__about">
         <p class="post__time">Опубликовано {{ .Time }}</p>
         <p class="post__author">Автор поста: {{ .Author.UserName }}</p>    
     </div>
+    {{ if isAuthorized }}
     <input class="post__add-comment-checkbox" id="checkbox-post{{.ID}}" type="checkbox">
     <label for="checkbox-post{{.ID}}" class="post__add-comment-button">комментировать</label>
     <form class="post__add-comment-form" method="post" id="test{{.ID}}">
