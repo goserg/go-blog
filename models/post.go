@@ -7,5 +7,6 @@ type Post struct {
 	Text   string
 	Author User
 
-	Units []PostUnit
+	Units    []PostUnit
+	Comments []Comment
 }

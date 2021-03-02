@@ -66,6 +66,7 @@ FORM
     font-size: 1.2rem;
     text-decoration: none;
     color: inherit;
+    width: max-content;
 }
 .button:hover {
     background: #FFE082;
@@ -76,6 +77,10 @@ FORM
     padding: 0.5rem;
     border-radius: 0.3rem;
     border: 1px solid #FFE082;
+}
+.input_hidden {
+    position: absolute;
+    display: none;
 }
 
 .textarea {
@@ -117,11 +122,59 @@ POST
     text-align: right;
     font-style: italic;
 }
+.post__text {
+    margin-bottom: 1rem;
+}
 .pagination {
     text-align: center;
     margin-top: 2rem;
 }
 
+.post__footer {
+    display: flex;
+}
+.post__about {
+    flex-grow: 1;
+}
+.post__add-comment-checkbox {
+    appearance: none;
+}
+.post__add-comment-button {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    cursor: pointer;
+    border: 1px solid transparent;
+}
+.post__add-comment-checkbox:checked + .post__add-comment-button {
+    display: none;
+}
+.post__add-comment-checkbox:focus + .post__add-comment-button {
+    border: 1px dashed #FFE082
+}
+.post__add-comment-form {
+    display: none;
+}
+.post__add-comment-checkbox:checked + .post__add-comment-button + .post__add-comment-form {
+    display: flex;
+    flex-direction: column;
+}
+
+/*
+COMMENT
+*/
+.comment {
+    border-top: 1px solid #FFE082;
+    border-left: 1px solid #FFE082;
+}
+.comment + .comment {
+    margin-top: 0.5rem;
+}
+.comment__author {
+}
+.comment__time {
+    font-size: 0.8em;
+}
 
 @media (max-width: 600px) {
     .container {

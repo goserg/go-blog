@@ -1,30 +1,16 @@
 {{ define "content" }}
-    <h1 class="title">Главная страница</h1>
-    {{ if .Posts }}
-        {{ range .Posts }}
-            <div class="post">
-                <h2 class="post__title">{{ .Title }}</h2>
-                <p>{{ range .Units }}
-                    {{ if eq .UnitType "BR"}}
-                    </p><p>
-                    {{ end }}
-                    {{ if .Link }}
-                        <a href="{{.Link}}" target="blank">{{.Text}}</a>
-                    {{ else }}
-                        {{ .Text }}
-                    {{ end }}
-                {{ end }}</p>
-                <p class="post__time">Опубликовано {{ .Time }}</p>
-                <p class="post__author">Автор поста: {{ .Author.UserName }}</p>
-            </div>
-        {{ end }}
-    {{ else }}
-        <p>Тут больше смотреть нечего</p>
-    {{ end }}
-    {{ if .User.Authorized }}
+    <h1 class="title">Все заметки</h1>
+    {{ if isAuthorized }}
         <a href="/create/" class="button">Создать заметку</a>
     {{ else }}
         <p>Только зарегистрированные пользователи могут создавать заметки</p>
+    {{ end }}
+    {{ if .Posts }}
+        {{ range .Posts }}
+            {{ template "post" .}}
+        {{ end }}
+    {{ else }}
+        <p>Тут смотреть нечего</p>
     {{ end }}
     <p class="pagination">
         {{ range .PrevPages }}

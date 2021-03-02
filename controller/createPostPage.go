@@ -45,7 +45,7 @@ func (c *Controller) CreatePostPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) insertPostToDB(post *models.Post) {
-	_, err := c.db.Exec(`insert into posts ("time", "title", "text", "author") values(NOW(), $1, $2, $3)`, post.Title, post.Text, post.Author.ID)
+	_, err := c.db.Exec(`insert into post ("time", "title", "text", "author") values(NOW(), $1, $2, $3)`, post.Title, post.Text, post.Author.ID)
 	if err != nil {
 		fmt.Println(err)
 	}

@@ -1,0 +1,6 @@
+{{ define "comment" }}
+    <div class="comment">
+        <p class="comment__author">{{ .Author.UserName }}: <span class="comment__time">{{ .Time }}</span></p>
+        <p class="comment__text">{{ .Text }}</p>
+    </div>
+{{ end }}
