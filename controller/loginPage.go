@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/goserg/microblog/server/utils"
+	"github.com/goserg/microblog/utils"
 )
 
 //LoginPage Страница логина

@@ -9,11 +9,28 @@ import (
 
 	_ "github.com/lib/pq"
 
-	"github.com/goserg/microblog/server/controller"
+	"github.com/goserg/microblog/controller"
 )
 
 func main() {
-	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	databaseURL, exists := os.LookupEnv("DATABASE_URL")
+	if !exists {
+		const (
+			user     = "postgres"
+			password = "pass"
+			host     = "localhost"
+			port     = 5432
+			dbname   = "postgres"
+		)
+		databaseURL = fmt.Sprintf("postgres://%v:%v@%v:%v/%v?sslmode=disable",
+			user,
+			password,
+			host,
+			port,
+			dbname,
+		)
+	}
+	db, err := sql.Open("postgres", databaseURL)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -30,7 +47,10 @@ func main() {
 
 	fmt.Println("Server started")
 
-	port := os.Getenv("PORT")
+	port, exists := os.LookupEnv("PORT")
+	if !exists {
+		port = "8000"
+	}
 
 	http.ListenAndServe(":"+port, nil)
 }

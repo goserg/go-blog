@@ -5,7 +5,7 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/goserg/microblog/server"
+	"github.com/goserg/microblog/models"
 )
 
 //CreatePostPage Страница логина
@@ -24,7 +24,7 @@ func (c *Controller) CreatePostPage(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(title)
 		fmt.Println(text)
 
-		post := server.Post{
+		post := models.Post{
 			Title:  title,
 			Text:   text,
 			Author: data.User,
@@ -44,7 +44,7 @@ func (c *Controller) CreatePostPage(w http.ResponseWriter, r *http.Request) {
 	tmpl.Execute(w, data)
 }
 
-func (c *Controller) insertPostToDB(post *server.Post) {
+func (c *Controller) insertPostToDB(post *models.Post) {
 	_, err := c.db.Exec(`insert into posts ("time", "title", "text", "author") values(NOW(), $1, $2, $3)`, post.Title, post.Text, post.Author.ID)
 	if err != nil {
 		fmt.Println(err)

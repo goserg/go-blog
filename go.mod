@@ -1,4 +1,4 @@
-module github.com/goserg/microblog/server
+module github.com/goserg/microblog
 
 go 1.15
 

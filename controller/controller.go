@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/goserg/microblog/server"
-	"github.com/goserg/microblog/server/logger"
-	"github.com/goserg/microblog/server/utils"
+	"github.com/goserg/microblog/logger"
+	"github.com/goserg/microblog/models"
+	"github.com/goserg/microblog/utils"
 )
 
 //Controller is a controller for page handling and sql connection
@@ -24,12 +24,12 @@ func NewController(db *sql.DB) *Controller {
 }
 
 type loginPageData struct {
-	User   server.User
+	User   models.User
 	Errors []string
 }
 
-func (c *Controller) getUserFromCookies(r *http.Request) server.User {
-	user := server.User{ID: 0, UserName: "Unauthorized", PasswordHash: ""}
+func (c *Controller) getUserFromCookies(r *http.Request) models.User {
+	user := models.User{ID: 0, UserName: "Unauthorized", PasswordHash: ""}
 	cookie, err := r.Cookie("token")
 	if err == nil && cookie.Value != "" {
 		username, passHash, exp, err := utils.ParseJWT(cookie.Value)
@@ -56,8 +56,8 @@ func (c *Controller) addUserToDB(userName string, password string) error {
 	return nil
 }
 
-func (c *Controller) getUserFromDB(userName string, passwordHash string) (server.User, error) {
-	user := server.User{Authorized: false}
+func (c *Controller) getUserFromDB(userName string, passwordHash string) (models.User, error) {
+	user := models.User{Authorized: false}
 	err := c.db.QueryRow(
 		`select * from "auth_user" where name=$1 and pass=$2`, userName, passwordHash,
 	).Scan(&user.ID, &user.UserName, &user.PasswordHash)

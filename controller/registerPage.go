@@ -5,12 +5,12 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/goserg/microblog/server"
-	"github.com/goserg/microblog/server/utils"
+	"github.com/goserg/microblog/models"
+	"github.com/goserg/microblog/utils"
 )
 
 type registerPageData struct {
-	User     server.User
+	User     models.User
 	UserName string
 	Errors   []string
 }

@@ -7,13 +7,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/goserg/microblog/server"
+	"github.com/goserg/microblog/models"
 )
 
 type homePageData struct {
-	User      server.User
+	User      models.User
 	Errors    []string
-	Posts     []server.Post
+	Posts     []models.Post
 	Page      int
 	NextPages []int
 	PrevPages []int
@@ -61,7 +61,7 @@ func (c *Controller) HomePage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (c *Controller) getPosts(page int) []server.Post {
+func (c *Controller) getPosts(page int) []models.Post {
 	postsOnPage := 10
 	if page < 1 {
 		page = 1
@@ -70,9 +70,9 @@ func (c *Controller) getPosts(page int) []server.Post {
 	if err != nil {
 		fmt.Println(err)
 	}
-	posts := []server.Post{}
+	posts := []models.Post{}
 	for rows.Next() {
-		post := server.Post{}
+		post := models.Post{}
 		authorID := 0
 		rows.Scan(&post.ID, &post.Time, &post.Title, &post.Text, &authorID)
 		post.Author = c.getAuthorFromDBByID(uint64(authorID))
@@ -80,7 +80,7 @@ func (c *Controller) getPosts(page int) []server.Post {
 
 		for post.Text != "" {
 			fmt.Println(post.Text)
-			unit := server.PostUnit{}
+			unit := models.PostUnit{}
 			firstLink := strings.Index(post.Text, "[Link]")
 			firstBr := strings.Index(post.Text, "\n")
 			fmt.Println(firstBr)
@@ -98,7 +98,7 @@ func (c *Controller) getPosts(page int) []server.Post {
 				unit.Text = post.Text[0:firstBr]
 				fmt.Println(unit.Text)
 				post.Text = post.Text[firstBr+1 : len(post.Text)]
-				post.Units = append(post.Units, unit, server.PostUnit{UnitType: "BR"})
+				post.Units = append(post.Units, unit, models.PostUnit{UnitType: "BR"})
 				continue
 			}
 			if firstLink < firstBr || firstBr == -1 {
@@ -109,7 +109,7 @@ func (c *Controller) getPosts(page int) []server.Post {
 					post.Text = post.Text[firstLink:len(post.Text)]
 				}
 
-				unit = server.PostUnit{UnitType: "link"}
+				unit = models.PostUnit{UnitType: "link"}
 				indexOfText := strings.Index(post.Text, "[LinkText]")
 				fmt.Printf(`indexOfText: %d`, indexOfText)
 				indexOfLinkEnd := strings.Index(post.Text, "[/Link]")
@@ -127,8 +127,8 @@ func (c *Controller) getPosts(page int) []server.Post {
 	return posts
 }
 
-func (c *Controller) getAuthorFromDBByID(id uint64) server.User {
-	author := server.User{}
+func (c *Controller) getAuthorFromDBByID(id uint64) models.User {
+	author := models.User{}
 	err := c.db.QueryRow(`select * from auth_user where id=$1`, id).Scan(&author.ID, &author.UserName, &author.PasswordHash)
 	if err != nil {
 		fmt.Println(err)

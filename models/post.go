@@ -1,4 +1,4 @@
-package server
+package models
 
 type Post struct {
 	ID     uint64

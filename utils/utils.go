@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
-	"github.com/goserg/microblog/server"
+	"github.com/goserg/microblog/models"
 )
 
 func Hash(bytes []byte) string {
@@ -39,7 +39,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-func GenerateNewToken(user server.User) string {
+func GenerateNewToken(user models.User) string {
 	claims := &Claims{
 		Username:     user.UserName,
 		PasswordHash: user.PasswordHash,
