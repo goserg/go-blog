@@ -1,6 +1,7 @@
 {{ define "header" }}
-        <h1 class="logo"><a href="/">Super Awesome Go-Driven Blog</a></h1>
-        {{ if .User.Authorized }}
+<div class="container">
+    <h1 class="logo"><a href="/">Super Awesome Go-Driven Blog</a></h1>
+    {{ if .User.Authorized }}
         <div class="user-status">
             Привет, {{ .User.UserName }} (<a href="/logout/">выйти</a>)
         </div>
@@ -10,4 +11,5 @@
             <p><a href="/register/">Зарегистрироваться</a></p>
         </div>
     {{ end }}
+</div>
 {{ end }}
