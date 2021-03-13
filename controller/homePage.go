@@ -171,7 +171,6 @@ func (c *Controller) getComments(post models.Post) []models.Comment {
 		err := res.Scan(&comment.ID, &comment.Time, &comment.Text, &authorID, &comment.RefPost, &comment.RefComment)
 		if err != nil {
 			fmt.Println(err)
-			return comments
 		}
 		comment.Author = c.getAuthorFromDBByID(uint64(authorID))
 		comment.Time = strings.Replace(strings.Split(comment.Time, ".")[0], "T", " в ", -1)
