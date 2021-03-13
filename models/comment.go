@@ -6,5 +6,5 @@ type Comment struct {
 	Text       string
 	Author     User
 	RefPost    string
-	RefComemnt string
+	RefComment string
 }

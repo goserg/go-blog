@@ -24,7 +24,10 @@ func (c *Controller) RegisterPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodPost {
-		r.ParseForm()
+		err := r.ParseForm()
+		if err != nil {
+			fmt.Println(err)
+		}
 		userName := r.Form["userName"][0]
 		password1 := r.Form["password1"][0]
 		password2 := r.Form["password2"][0]
@@ -34,12 +37,18 @@ func (c *Controller) RegisterPage(w http.ResponseWriter, r *http.Request) {
 		if len(data.Errors) == 0 {
 			err := c.addUserToDB(userName, utils.Hash([]byte(password1)))
 			if err != nil {
-				c.l.Log(fmt.Sprintf("User '%s' not created with error: %s.", userName, err.Error()), utils.ReadUserIP(r))
 				if err.Error() == `pq: duplicate key value violates unique constraint "auth_user_name_key"` {
 					data.Errors = append(data.Errors, "Имя пользователя не доступно. Выберите другое.")
 				}
+				err := c.l.Log(fmt.Sprintf("User '%s' not created with error: %s.", userName, err.Error()), utils.ReadUserIP(r))
+				if err != nil {
+					fmt.Println(err)
+				}
 			} else {
-				c.l.Log(fmt.Sprintf("User '%s' created.", userName), utils.ReadUserIP(r))
+				err := c.l.Log(fmt.Sprintf("User '%s' created.", userName), utils.ReadUserIP(r))
+				if err != nil {
+					fmt.Println(err)
+				}
 
 				files := []string{
 					"templates/base.gohtml",
@@ -49,7 +58,10 @@ func (c *Controller) RegisterPage(w http.ResponseWriter, r *http.Request) {
 
 				data.UserName = userName
 				tmpl := template.Must(template.ParseFiles(files...))
-				tmpl.Execute(w, data)
+				err = tmpl.Execute(w, data)
+				if err != nil {
+					fmt.Println(err)
+				}
 				return
 			}
 		}
@@ -62,11 +74,14 @@ func (c *Controller) RegisterPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl := template.Must(template.ParseFiles(files...))
-	tmpl.Execute(w, data)
+	err := tmpl.Execute(w, data)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func validateRegisterForm(userName string, password1 string, password2 string) []string {
-	errors := []string{}
+	var errors []string
 	if password1 != password2 {
 		errors = append(errors, "Пароли не совпадают")
 	}
