@@ -28,7 +28,7 @@ func main() {
 
 	fmt.Println("Server started")
 
-	http.ListenAndServe(getPort(), nil)
+	log.Fatal(http.ListenAndServe(getPort(), nil))
 }
 
 func getPort() string {

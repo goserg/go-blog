@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 )
@@ -20,5 +21,8 @@ func (c *Controller) ForgotPassPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl := template.Must(template.ParseFiles(files...))
-	tmpl.Execute(w, data)
+	err := tmpl.Execute(w, data)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

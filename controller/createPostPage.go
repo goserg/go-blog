@@ -17,8 +17,11 @@ func (c *Controller) CreatePostPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodPost {
-		r.ParseForm()
-
+		err := r.ParseForm()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 		title := r.Form["title"][0]
 		text := r.Form["text"][0]
 		fmt.Println(title)
@@ -41,7 +44,10 @@ func (c *Controller) CreatePostPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	tmpl := template.Must(template.ParseFiles(files...))
-	tmpl.Execute(w, data)
+	err := tmpl.Execute(w, data)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (c *Controller) insertPostToDB(post *models.Post) {

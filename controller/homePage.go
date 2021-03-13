@@ -27,7 +27,11 @@ func (c *Controller) HomePage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if r.Method == http.MethodPost {
-		r.ParseForm()
+		err := r.ParseForm()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
 		fmt.Println(r.Form)
 		comment := models.Comment{
 			Text:    r.Form["text"][0],
@@ -80,10 +84,14 @@ func (c *Controller) HomePage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (c *Controller) postComment(comment models.Comment, user models.User) {
-	c.db.Exec(`insert into comment ("time", "text", "author", "post") values(NOW(), $1, $2, $3)`, comment.Text, user.ID, comment.RefPost)
+	_, err := c.db.Exec(`insert into comment ("time", "text", "author", "post") values(NOW(), $1, $2, $3)`, comment.Text, user.ID, comment.RefPost)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 func (c *Controller) getPosts(page int) []models.Post {
+	var posts []models.Post
 	postsOnPage := 10
 	if page < 1 {
 		page = 1
@@ -91,12 +99,16 @@ func (c *Controller) getPosts(page int) []models.Post {
 	rows, err := c.db.Query(`select * from post order by "time" DESC OFFSET $1 LIMIT $2`, (page-1)*postsOnPage, postsOnPage)
 	if err != nil {
 		fmt.Println(err)
+		return posts
 	}
-	posts := []models.Post{}
 	for rows.Next() {
 		post := models.Post{}
 		authorID := 0
-		rows.Scan(&post.ID, &post.Time, &post.Title, &post.Text, &authorID)
+		err := rows.Scan(&post.ID, &post.Time, &post.Title, &post.Text, &authorID)
+		if err != nil {
+			fmt.Println(err)
+			return posts
+		}
 		post.Author = c.getAuthorFromDBByID(uint64(authorID))
 		post.Time = strings.Replace(strings.Split(post.Time, ".")[0], "T", " в ", -1)
 
@@ -146,7 +158,7 @@ func (c *Controller) getPosts(page int) []models.Post {
 }
 
 func (c *Controller) getComments(post models.Post) []models.Comment {
-	comments := []models.Comment{}
+	var comments []models.Comment
 
 	res, err := c.db.Query(`select * from comment where post=$1 order by time desc`, post.ID)
 	if err != nil {
@@ -156,7 +168,11 @@ func (c *Controller) getComments(post models.Post) []models.Comment {
 	for res.Next() {
 		comment := models.Comment{}
 		var authorID int64
-		res.Scan(&comment.ID, &comment.Time, &comment.Text, &authorID, &comment.RefPost, &comment.RefComemnt)
+		err := res.Scan(&comment.ID, &comment.Time, &comment.Text, &authorID, &comment.RefPost, &comment.RefComment)
+		if err != nil {
+			fmt.Println(err)
+			return comments
+		}
 		comment.Author = c.getAuthorFromDBByID(uint64(authorID))
 		comment.Time = strings.Replace(strings.Split(comment.Time, ".")[0], "T", " в ", -1)
 		comments = append(comments, comment)
